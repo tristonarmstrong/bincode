@@ -1,37 +1,38 @@
-# [BinCode](jsbin.asadk.dev) - A Complete Self-Hostable JSFiddle Alternative
+# [BinCode](https://bincode.asadk.dev) - A Complete Self-Hostable JSFiddle Alternative
 
 ## Overview
-BinCode is a minimalist platform for managing and sharing code snippets, built with Vue.js and SQLite. Unlike similar tools that depend on external services, BinCode runs entirely on your own infrastructure, giving you complete control over your data and workflow.
+BinCode is a minimalist platform for managing and sharing code snippets, built with Vue.js and SQLite. It runs entirely on your own infrastructure, giving you full control over your data and workflow.
+
+![BinCode Demo](https://i.postimg.cc/Gp4N2yPy/bincode-demo.png)
+
 
 ## Key Features
-- **Fully Self-Contained:** No external dependencies or services required
-- **Modern Stack:** Built with Vue.js frontend and SQLite database
-- **Secure Authentication:** Simple JWT-based user management
-- **Instant Sharing:** Generate unique URLs for any code snippet
-- **Minimal Setup:** Just create users manually and start sharing code
-- **Performance Focused:** Lightweight design ensures fast operation
+- **Self-Contained:** No external dependencies required.
+- **Modern Stack:** Vue.js frontend and SQLite database.
+- **JWT Authentication:** Secure, simple user management.
+- **Instant Sharing:** Generate unique URLs for snippets.
+- **Minimal Setup:** Create users manually to start sharing.
+- **Performance-Focused:** Lightweight and fast.
 
 ## Architecture
-- Frontend: Vue.js
-- Database: SQLite
-- Authentication: JWT
-- Deployment: Single server, self-contained
+- **Frontend:** Vue.js
+- **Database:** SQLite
+- **Authentication:** JWT
+- **Deployment:** Single self-contained server.
 
 There is no signups its by design just create users manullay and they can start commits snippets to share
 
 ## Why BinCode?
 
-During my search for open-source code sharing solutions, I found that most platforms required external services or had complex deployment requirements. I needed a straightforward, self-hostable tool that focused solely on creating and sharing code snippets.
-
-BinCode was built with simplicity in mind. While it may not have all the features of larger platforms, its lightweight nature makes it perfect for teams and individuals who need a reliable, easy-to-maintain solution for code sharing.
-
+BinCode is a lightweight, self-hostable tool for teams and individuals needing a simple, reliable solution for code sharing without relying on external services.
 
 ## Design Choices
-- **No Signups:** User accounts are created manually by administrators to keep the system simple and secure
-- **Self-Contained:** Everything runs on your infrastructure, ensuring data privacy and control
+- **No Signups:** Admins manually create user accounts for simplicity and security.
+- **Self-Hosted:** Ensures privacy and control over your data.
+
 
 ## Contributing
-While BinCode is intentionally minimal, contributions are always welcome! Feel free to add features that enhance its functionality while maintaining its lightweight nature.
+Contributions are welcome, as long as the tool remains lightweight and self-contained.
 
 ## Getting Started
 

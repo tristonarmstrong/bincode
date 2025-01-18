@@ -21,10 +21,7 @@ router.post('/login', validateAuth, async (req, res, next) => {
       if (!user) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
-
-      console.log('User found:', { id: user.id, email: user.email });
-
-
+      
       const validPassword = await bcrypt.compare(password, user.password);
       if (!validPassword) {
         return res.status(401).json({ error: 'Invalid credentials' });

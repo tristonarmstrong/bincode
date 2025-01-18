@@ -28,8 +28,6 @@ router.post('/', auth, validateSnippet, async (req, res) => {
 router.get('/share/:shareId', async (req, res) => {
   const { shareId } = req.params;
   const db = getDb();
-
-  console.log(shareId);
   
   db.get(
     snippetQueries.getByShareId,

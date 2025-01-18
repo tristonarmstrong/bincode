@@ -3,8 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JS Playground</title>
+    <title>BinCode</title>
+    <link rel="icon" type="image/png" href="./logo/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="./logo/favicon.svg" />
+    <link rel="shortcut icon" href="./logo/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
     <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="./font.css">
     <!-- Prismjs css -->
     <link rel="stylesheet" href="./libraries/prism/theme/prism.min.css" />
   </head>
@@ -15,13 +21,29 @@
         <div class="title-input" v-if="token">
           <input type="text" v-model="title" placeholder="Snippet title" />
         </div>
-        <div>
+        <div class="toggle-container">
           <button class="toggle-icon" @click="toggleEditor">
-            {{ showEditor ? '🙈 editor': '👀 editor'}}
+            <span v-html="showEditor ? extraIcons[0].visible : extraIcons[1].hidden"></span>
+            <span>editor</span>
           </button>
 
           <button class="toggle-icon" @click="togglePreview">
-            {{ showPreview ? '🙈 preview' : '👀 preview' }}
+            <span v-html="showPreview ? extraIcons[0].visible : extraIcons[1].hidden"></span>
+            <span>preview</span>
+          </button>
+
+          <button class="toggle-icon" @click="toggleConsole">
+            <span v-html="showConsole ? extraIcons[2].console : extraIcons[3].console_hiddne"></span>
+            <span>console</span>
+          </button>
+        
+          <button 
+            class="toggle-icon" 
+            @click="toggleExecution"
+            :class="{ 'toggle-active': isExecutionPaused }"
+          >
+            <span v-html="isExecutionPaused ? playIcon : pauseIcon"></span>
+            <span>{{ isExecutionPaused ? 'live' : 'pause' }}</span>
           </button>
         </div>
         <div class="nav-actions">
@@ -50,11 +72,8 @@
               :class="{ active: activeTab === tab.id }"
               @click="switchTab(tab.id)"
             >
-              <span class="tab-icon">{{ tab.icon }}</span>
+            <svg class="tab-icon" v-html="tab.icon"></svg>
               {{ tab.label }}
-              <kbd v-if="tab.id === 'html'">⌘1</kbd>
-              <kbd v-if="tab.id === 'css'">⌘2</kbd>
-              <kbd v-if="tab.id === 'js'">⌘3</kbd>
             </button>
           </div>
 
@@ -63,6 +82,7 @@
             <textarea
               :value="currentCode"
               @input="handleInput"
+              @scroll="handleScroll"
               @keydown="handleKeydown"
               :class="{ 'active-editor': true }"
               spellcheck="false"
@@ -83,7 +103,8 @@
         >
           <iframe id="preview-frame"></iframe>
         </div>
-      </div>
+    
+    </div>
 
       <!-- Share Modal -->
       <div

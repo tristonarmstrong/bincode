@@ -9,17 +9,15 @@ const app = express();
 app.set('trust proxy', true);
 
 app.use(rateLimit({
-  windowMs: 5 * 60 * 1000, // 5min
-  max: 100, // 100 request per IP
+  windowMs: 2 * 60 * 1000, // 2min
+  max: 1000, // 1000 request per IP
 }));
 
 app.use(express.json());
 app.use(express.static('public'));
 
-// routes
 app.use('/api', routes);
 
-// error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something broke!' });
