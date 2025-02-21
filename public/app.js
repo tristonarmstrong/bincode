@@ -153,6 +153,11 @@ createApp({
   },
 
   mounted() {
+    const textarea = document.querySelector('.editor-content textarea');
+    if (textarea) {
+      textarea.addEventListener('paste', this.handlePaste);
+    }
+
     this.loadPrismTheme();
     this.initThemeListener();
 
@@ -172,8 +177,37 @@ createApp({
       };
     }
   },
+  beforeUnmount() {
+    const textarea = document.querySelector('.editor-content textarea');
+    if (textarea) {
+      textarea.removeEventListener('paste', this.handlePaste);
+    }
+  },
 
   methods: {
+    handlePaste(event) {
+      const textarea = event.target;
+      
+      // scroll to cursor
+      requestAnimationFrame(() => {
+        this.scrollToCursor(textarea);
+      });
+    },
+    scrollToCursor(textarea) {
+      const cursorPosition = textarea.selectionStart;
+  
+      const lineHeight = parseInt(getComputedStyle(textarea).lineHeight, 10);
+      const lines = textarea.value.substr(0, cursorPosition).split('\n').length;
+  
+      const scrollTop = (lines - 1) * lineHeight;
+  
+      textarea.scrollTop = scrollTop;
+  
+      const pre = textarea.nextElementSibling;
+      if (pre) {
+        pre.scrollTop = scrollTop;
+      }
+    },
     loadPrismTheme() {
       const existingTheme = document.querySelector("link[data-prism-theme]");
       if (existingTheme) {
@@ -214,6 +248,9 @@ createApp({
       const textarea = event.target;
       const pre = textarea.nextElementSibling;
       if (pre) {
+        pre.style.width = `${textarea.offsetWidth}px`;
+        pre.style.height = `${textarea.offsetHeight}px`;
+        
         pre.scrollTop = textarea.scrollTop;
         pre.scrollLeft = textarea.scrollLeft;
       }

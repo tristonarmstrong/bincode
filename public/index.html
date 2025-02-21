@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./font.css">
     <!-- Prismjs css -->
     <link rel="stylesheet" href="./libraries/prism/theme/prism.min.css" />
+
   </head>
   <body>
     <div id="app">
@@ -80,15 +81,15 @@
           <!-- Editor content -->
           <div class="editor-content">
             <textarea
-              :value="currentCode"
-              @input="handleInput"
-              @scroll="handleScroll"
-              @keydown="handleKeydown"
-              :class="{ 'active-editor': true }"
-              spellcheck="false"
-              autocomplete="off"
-              :placeholder="'Enter your ' + activeTab.toUpperCase() + ' code here...'"
-            ></textarea>
+            :value="currentCode"
+            @input="handleInput"
+            @scroll="handleScroll"
+            @keydown="handleKeydown"
+            :class="{ 'active-editor': true }"
+            spellcheck="false"
+            autocomplete="off"
+            :placeholder="'Enter your ' + activeTab.toUpperCase() + ' code here...'"
+          ></textarea>
             <pre
               class="editor-highlight"
               aria-hidden="true"
