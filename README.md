@@ -3,7 +3,7 @@
 ## Overview
 BinCode is a minimalist platform for managing and sharing code snippets, built with Vue.js and SQLite. It runs entirely on your own infrastructure, giving you full control over your data and workflow.
 
-![BinCode Demo](https://i.postimg.cc/Gp4N2yPy/bincode-demo.png)
+![BinCode Demo](https://i.postimg.cc/x95S6Gct/bincode-demo.png)
 
 
 ## Key Features
