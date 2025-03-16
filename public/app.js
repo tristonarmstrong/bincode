@@ -12,28 +12,29 @@ createApp({
       loginPassword: "",
       title: "",
       html: `<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Bin Code</title>
-  </head>
-<body>
-
-</body>
-</html>
+              <html>
+                <head>
+                  <meta charset="utf-8">
+                  <meta name="viewport" content="width=device-width">
+                  <title>Bin Code</title>
+                </head>
+                <body>
+              
+                </body>
+              </html>
       `,
       css: "",
       js: "",
       shareUrl: "",
       currentShareId: null,
       isDragging: false,
-      startX: null,
-      startWidth: null,
-      containerWidth: null,
-      editorWidth: "50%",
-      minWidth: 250,
-      maxWidth: null,
+      /** and x or y position */
+      start: null,
+      startSize: null,
+      containerSize: null,
+      editorSize: "50%",
+      minSize: 250,
+      maxSize: null,
       // Tab state
       activeTab: "html",
       tabs: [
@@ -109,14 +110,14 @@ createApp({
       },
     },
 
-    previewWidth() {
+    previewSize() {
       if (
-        typeof this.editorWidth === "string" &&
-        this.editorWidth.endsWith("%")
+        typeof this.editorSize === "string" &&
+        this.editorSize.endsWith("%")
       ) {
-        return 100 - parseInt(this.editorWidth) + "%";
+        return 100 - parseInt(this.editorSize) + "%";
       }
-      return `calc(100% - ${this.editorWidth}px)`;
+      return `calc(100% - ${this.editorSize}px)`;
     },
 
     currentLanguage() {
@@ -285,9 +286,9 @@ createApp({
     togglePreview() {
       this.showPreview = !this.showPreview;
       if (!this.showPreview) {
-        this.editorWidth = "100%";
+        this.editorSize = "100%";
       } else {
-        this.editorWidth = "50%";
+        this.editorSize = "50%";
       }
     },
     highlightCode(code, tab) {
@@ -373,8 +374,8 @@ createApp({
 
     initializeLayout() {
       const container = document.querySelector(".editor-container");
-      this.containerWidth = container.offsetWidth;
-      this.maxWidth = this.containerWidth - this.minWidth;
+      this.containerSize = container.offsetSize;
+      this.maxSize = this.containerSize - this.minSize;
 
       this.updateLayout();
     },
@@ -384,50 +385,46 @@ createApp({
       const preview = document.querySelector(".preview");
 
       if (editorGroup && preview) {
-        editorGroup.style.width = this.editorWidth;
-        preview.style.width = this.previewWidth;
+        editorGroup.style.height= this.editorSize;
+        preview.style.height = this.previewSize;
       }
     },
 
     startResize(event) {
+      const isTouch = Object.hasOwn(event, 'touches')
       event.preventDefault();
       this.isDragging = true;
 
       // Get clientX from either mouse or touch event
-      this.startX = event.clientX || (event.touches && event.touches[0].clientX);
+      this.start = isTouch ? (event.touches[0].clientX) : (event.clientX)
 
       const editorGroup = document.querySelector(".editor-group");
-      this.startWidth = editorGroup.offsetWidth;
+      this.startSize = isTouch ? editorGroup.offsetHeight : editorGroup.offsetSize;
 
       this.toggleIframe("none")
 
       document.body.classList.add('resizing');
 
-      document.addEventListener('mousemove', this.onMouseMove);
-      document.addEventListener('touchmove', this.onTouchMove, { passive: false });
-      document.addEventListener('mouseup', this.onMouseUp);
-      document.addEventListener('touchend', this.onTouchEnd);
+      !isTouch && document.addEventListener('mousemove', this.onMove);
+      !isTouch && document.addEventListener('mouseup', this.onMouseUp);
+
+      isTouch && document.addEventListener('touchmove', this.onMove, { passive: false });
+      isTouch && document.addEventListener('touchend', this.onTouchEnd);
     },
 
-    onMouseMove(event) {
+    onMove(event){
       if (!this.isDragging) return;
-      this.processMove(event.clientX);
+      const isTouch = event.touches && event.touches[0]
+      isTouch && event.preventDefault(); // Prevents scrolling during resize on touch devices
+      this.processMove(isTouch ? event.touches[0].clientX : event.clientX);    
     },
 
-    onTouchMove(event) {
-      if (!this.isDragging) return;
-
-      // Prevents scrolling during resize on touch devices
-      event.preventDefault();
-
-      if (event.touches && event.touches[0]) {
-        this.processMove(event.touches[0].clientX);
-      }
-    },
-
-    processMove(clientX) {
-      const deltaX = clientX - this.startX;
-      this.editorWidth = `${this.startWidth + deltaX}px`;
+    /** does the math for the mouse position
+    * @param {number} clientPos can be either x or y
+    */
+    processMove(clientPos) {
+      const delta = clientPos - this.start;
+      this.editorSize = `${this.startSize + delta}px`;
       this.updateLayout();
     },
 
