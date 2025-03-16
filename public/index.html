@@ -97,6 +97,13 @@
           </div>
         </div>
 
+        <!-- Resize handle -->
+        <div class="resize-handle" 
+          v-show="showEditor && showPreview" 
+          @mousedown="startResize"
+          @touchstart="startResize"
+        ></div>
+
         <div
           class="preview"
           :style="{ width: previewWidth }"

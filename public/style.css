@@ -289,6 +289,8 @@ textarea::placeholder {
   position: relative;
   z-index: 10;
   flex-shrink: 0;
+  transition: background 0.15s;
+  margin: 0 -2px;
 }
 
 .resize-handle::after {
@@ -300,7 +302,18 @@ textarea::placeholder {
   width: 2px;
   background: var(--border);
   transform: translateX(-50%);
-  transition: background-color 0.15s;
+  transition: background 0.15s;
+}
+
+.resize-handle:hover,
+.resize-handle:active {
+  background: var(--primary-light);
+}
+
+.resize-handle:hover::after,
+.resize-handle:active::after {
+  background: var(--primary);
+  width: 4px;
 }
 
 body.resizing {

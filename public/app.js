@@ -389,6 +389,71 @@ createApp({
       }
     },
 
+    startResize(event) {
+      event.preventDefault();
+      this.isDragging = true;
+
+      // Get clientX from either mouse or touch event
+      this.startX = event.clientX || (event.touches && event.touches[0].clientX);
+
+      const editorGroup = document.querySelector(".editor-group");
+      this.startWidth = editorGroup.offsetWidth;
+
+      this.toggleIframe("none")
+
+      document.body.classList.add('resizing');
+
+      document.addEventListener('mousemove', this.onMouseMove);
+      document.addEventListener('touchmove', this.onTouchMove, { passive: false });
+      document.addEventListener('mouseup', this.onMouseUp);
+      document.addEventListener('touchend', this.onTouchEnd);
+    },
+
+    onMouseMove(event) {
+      if (!this.isDragging) return;
+      this.processMove(event.clientX);
+    },
+
+    onTouchMove(event) {
+      if (!this.isDragging) return;
+
+      // Prevents scrolling during resize on touch devices
+      event.preventDefault();
+
+      if (event.touches && event.touches[0]) {
+        this.processMove(event.touches[0].clientX);
+      }
+    },
+
+    processMove(clientX) {
+      const deltaX = clientX - this.startX;
+      this.editorWidth = `${this.startWidth + deltaX}px`;
+      this.updateLayout();
+    },
+
+    onMouseUp() {
+      this.endResize();
+    },
+
+    onTouchEnd() {
+      this.endResize();
+    },
+
+    endResize() {
+      if (!this.isDragging) return;
+
+      this.isDragging = false;
+      document.body.classList.remove('resizing');
+
+      this.toggleIframe("auto")
+
+      // Remove both mouse and touch event listeners
+      document.removeEventListener('mousemove', this.onMouseMove);
+      document.removeEventListener('touchmove', this.onTouchMove);
+      document.removeEventListener('mouseup', this.onMouseUp);
+      document.removeEventListener('touchend', this.onTouchEnd);
+    },
+
     updatePreview() {
       if (this.isExecutionPaused) return;
 
@@ -541,5 +606,13 @@ createApp({
         alert("Failed to copy URL");
       }
     },
+
+    /**@param {"auto" | "none"} setting */
+    toggleIframe(setting) {
+      const iframe = document.getElementById("preview-frame");
+      if (!iframe) return
+      iframe.style.pointerEvents = setting;
+    },
+
   },
 }).mount("#app");
