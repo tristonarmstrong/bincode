@@ -373,7 +373,6 @@ createApp({
 
     initializeLayout() {
       const container = document.querySelector(".editor-container");
-      if (!container) return
       this.containerWidth = container.offsetWidth;
       this.maxWidth = this.containerWidth - this.minWidth;
 
